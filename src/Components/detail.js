@@ -8,17 +8,10 @@ import React, { useContext } from 'react';
 import { WeatherContext } from '../Context/weather';
 
 export default () => {
-  const weather = useContext(WeatherContext);
-  if (!weather.state) {
-    return (
-      <div>
-        Loading...
-      </div>
-    );
-  }
+  const ctx = useContext(WeatherContext);
   return (
     <div>
-      { JSON.stringify(weather.state.list[0]) }
+      { JSON.stringify(ctx.state.weather.list[0]) }
     </div>
   );
 };

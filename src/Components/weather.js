@@ -8,16 +8,13 @@ import { WeatherContext } from '../Context/weather';
 import Detail from './detail';
 
 export default () => {
-  const weather = useContext(WeatherContext);
+  const ctx = useContext(WeatherContext);
   return (
     <div>
-      <button type='button' onClick={weather.postWeather}>
+      <button type='button' onClick={ctx.action.postWeather}>
         <h1> reflesh!!! </h1>
       </button>
       <Detail />
-      <div>
-        { JSON.stringify(weather.state) }
-      </div>
     </div>
   );
 };

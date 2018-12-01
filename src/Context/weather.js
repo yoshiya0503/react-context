@@ -3,60 +3,54 @@
  * @name weather.js
  * @author Yoshiya Ito <myon53@gmail.com>
  */
-import { createContext } from 'react';
+import { createContext, useReducer } from 'react';
+import axios from 'axios';
 
-export const WeatherContext = createContext(null);
+export const WeatherContext = createContext({});
 
 const url = `http://api.openweathermap.org/data/2.5/forecast?q=Tokyo,jp&APPID=${process.env.REACT_APP_WEATHER_KEY}`;
+//const url = `http://api.openweathermap.org/data/2.5/forecast`
 
-export const weatherReducer = (state = {}, action) => {
+export const weatherReducer = (state, action) => {
   switch (action.type) {
+    case 'GET_START':
+      return Object.assign(state, { loading: true });
     case 'GET_SUCCESS':
-      return action.data;
+      return Object.assign(state, { weather: action.data, loading: false });
     case 'GET_FAILED':
-      return { message: 'failed GET' };
+      return Object.assign(state, { error: action.error, loading: false });
     case 'POST_SUCCESS':
-      return action.data;
+      return Object.assign(state, { weather: action.data, loading: false });
     case 'POST_FAILED':
-      return { message: 'failed POST' };
-    case 'DELETE_SUCCESS':
-    case 'DELETE_FAILED':
+      return Object.assign(state, { error: action.error });
     default:
       return state;
   }
 };
 
-export const getWeather = (dispatch) => (
-  async () => {
-    try {
-      const response = await fetch(url);
-      const json = await response.json();
-      dispatch({ type: 'GET_SUCCESS', data: json });
-    } catch(e) {
-      dispatch({ type: 'GET_FAILED' });
-    }
-  }
-);
+export const useWeather = () => {
+  const [state, dispatch] = useReducer(weatherReducer, {
+    weather: {},
+    loading: true,
+    error: null,
+  });
 
-export const postWeather = (dispatch) => (
-  async () => {
+  const getWeather = async () => {
     try {
-      const response = await fetch(url);
-      const json = await response.json();
-      dispatch({ type: 'POST_SUCCESS', data: json });
-    } catch(e) {
-      dispatch({ type: 'POST_FAILED' });
+      const result = await axios.get(url);
+      dispatch({ type: 'GET_SUCCESS', data: result.data });
+    } catch(error) {
+      dispatch({ type: 'GET_FAILED', error });
     }
   }
-);
 
-export const deleteWeather = (dispatch) => (
-  async () => {
+  const postWeather = async () => {
     try {
-      const weather = await fetch();
-      dispatch({ type: 'POST_SUCCESS', weather });
-    } catch(e) {
-      dispatch({ type: 'POST_FAILED' });
+      const result = await axios.get(url);
+      dispatch({ type: 'POST_SUCCESS', data: result.data });
+    } catch(error) {
+      dispatch({ type: 'POST_FAILED', error });
     }
   }
-);
+  return [state, { getWeather, postWeather }];
+};

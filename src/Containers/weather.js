@@ -3,22 +3,27 @@
  * @name weather.js
  * @author Yoshiya Ito <myon53@gmail.com>
  */
-import React, { useEffect, useReducer } from 'react';
-import { weatherReducer, WeatherContext, getWeather, postWeather } from '../Context/weather';
+import React, { useEffect } from 'react';
+import { WeatherContext, useWeather } from '../Context/weather';
 import Weather from '../Components/weather';
 
 
 export default () => {
-  const [state, dispatch] = useReducer(weatherReducer);
-
-  const value = { state, postWeather: postWeather(dispatch) };
+  const [state, action] = useWeather();
 
   useEffect(() => {
-    getWeather(dispatch)()
+    action.getWeather();
   }, []);
 
+  if (state.error) {
+    return <div> this is error dialog {state.error.message}</div>;
+  }
+
+  if (state.loading) {
+    return <div> Loading...  </div>;
+  }
   return (
-    <WeatherContext.Provider value={value}>
+    <WeatherContext.Provider value={{state, action}}>
       <Weather />
     </WeatherContext.Provider>
   );
