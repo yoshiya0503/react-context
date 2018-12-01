@@ -8,6 +8,7 @@ In the project directory, you can run:
 
 ```
 # ADD YOUR WEATHER API KEY
+# SEE https://openweathermap.org/api
 export REACT_APP_WEATHER_KEY='xxxx'
 yarn run start
 ```
