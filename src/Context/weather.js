@@ -8,8 +8,8 @@ import axios from 'axios';
 
 export const WeatherContext = createContext({});
 
-const url = `http://api.openweathermap.org/data/2.5/forecast?q=Tokyo,jp&APPID=${process.env.REACT_APP_WEATHER_KEY}`;
-//const url = `http://api.openweathermap.org/data/2.5/forecast`
+//const url = `http://api.openweathermap.org/data/2.5/forecast?q=Tokyo,jp&APPID=${process.env.REACT_APP_WEATHER_KEY}`;
+const url = `http://api.openweathermap.org/data/2.5/forecast`
 
 export const weatherReducer = (state, action) => {
   switch (action.type) {

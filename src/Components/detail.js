@@ -11,7 +11,7 @@ export default () => {
   const ctx = useContext(WeatherContext);
   return (
     <div>
-      { JSON.stringify(ctx.state.weather.list[0]) }
+      { JSON.stringify(ctx.state.weather) }
     </div>
   );
 };
